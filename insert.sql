@@ -13,6 +13,40 @@ WHERE
 indicadores.protocolo = subquery.protocolo
 AND indicadores.dat_encerramento = subquery.ultima_data;
 
+CREATE TABLE public.indicadores_cvi
+(
+    cod_processo integer NOT NULL,
+    configuracao_orgao_id integer,
+    protocolo character varying(100) COLLATE pg_catalog."default" NOT NULL DEFAULT NULL::character varying,
+    nome_orgao character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    nome_servico character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    cod_ciclo smallint NOT NULL,
+    cod_etapa smallint NOT NULL,
+    nome_etapa character varying(60) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    cod_tipo_etapa smallint,
+    nome_tipo_etapa character varying(60) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    ide_finalizado character varying(1) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    status_processo character varying(60) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    cpf_cidadao character varying(50) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    dat_abertura timestamp without time zone,
+    dat_encerramento timestamp without time zone NOT NULL,
+    dat_conclusao_etapa timestamp without time zone,
+    nota integer,
+    dimensao_avaliacao text COLLATE pg_catalog."default",
+    dat_avaliacao timestamp without time zone,
+    id_fase_processo numeric(19,0) DEFAULT NULL::numeric,
+    nome_fase_processo character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    cod_servico integer NOT NULL,
+    cod_orgao integer NOT NULL,
+    atendente text COLLATE pg_catalog."default",
+    situacao_atual character varying(3) COLLATE pg_catalog."default",
+    CONSTRAINT indicadores_cvi_pkey PRIMARY KEY (cod_processo, protocolo, cod_servico, cod_orgao, cod_etapa, dat_encerramento, cod_ciclo)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
 TRUNCATE public.indicadores_cvi;
 
 INSERT INTO public.indicadores_cvi(
@@ -20,6 +54,21 @@ cod_processo, configuracao_orgao_id, protocolo, nome_orgao, nome_servico, cod_ci
 (
 SELECT * FROM indicadores WHERE cod_servico IN (1159,6906)
 );
+
+CREATE TABLE IF NOT EXISTS public.indicadores_cvi_dimensao
+(
+    protocolo character varying(100) COLLATE pg_catalog."default" NOT NULL DEFAULT NULL::character varying,
+    nota integer NOT NULL,
+    cod_ciclo smallint NOT NULL,
+    cod_etapa smallint NOT NULL,
+    dat_avaliacao timestamp without time zone NOT NULL,
+    dimensao_avaliacao text COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT indicadores_cvi_dimensao_pkey PRIMARY KEY (protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
 
 TRUNCATE public.indicadores_cvi_dimensao;
 
@@ -51,6 +100,3 @@ t1.cod_ciclo,
 t1.nota,
 t1.dat_avaliacao
 );
-
-TRUNCATE public.indicadores_pesca;
-TRUNCATE public.indicadores_pesca_dimensao;
