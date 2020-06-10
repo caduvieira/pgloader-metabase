@@ -13,7 +13,7 @@ WHERE
 indicadores.protocolo = subquery.protocolo
 AND indicadores.dat_encerramento = subquery.ultima_data;
 
-CREATE TABLE public.indicadores_cvi
+CREATE TABLE IF NOT EXISTS public.indicadores_cvi
 (
     cod_processo integer NOT NULL,
     configuracao_orgao_id integer,
