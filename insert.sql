@@ -1,7 +1,7 @@
 ALTER TABLE indicadores ADD COLUMN IF NOT EXISTS situacao_atual varchar(3);
 
 UPDATE indicadores 
-SET situacao_atual = 'Sim'
+SET situacao_atual = 'sim'
 FROM ( SELECT
   protocolo,
   MAX(dat_encerramento) as ultima_data
