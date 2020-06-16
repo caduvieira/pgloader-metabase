@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS public.indicadores_cvi_dimensao
     cod_etapa smallint NOT NULL,
     dat_avaliacao timestamp without time zone NOT NULL,
     dimensao_avaliacao text COLLATE pg_catalog."default" NOT NULL,
+	nome_servico character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     CONSTRAINT indicadores_cvi_dimensao_pkey PRIMARY KEY (protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
 )
 WITH (
@@ -81,7 +82,8 @@ t1.cod_etapa,
 t1.cod_ciclo,
 t1.nota,
 t1.dat_avaliacao,
-split_part(split_part(t1.dimensao_avaliacao, ',', n.n), ',', 1) dimensao_avaliacao    
+split_part(split_part(t1.dimensao_avaliacao, ',', n.n), ',', 1) dimensao_avaliacao,
+t1.nome_servico
 FROM indicadores_cvi as t1
 CROSS JOIN 
 (
@@ -152,6 +154,7 @@ CREATE TABLE IF NOT EXISTS public.indicadores_pesca_dimensao
     cod_etapa smallint NOT NULL,
     dat_avaliacao timestamp without time zone NOT NULL,
     dimensao_avaliacao text COLLATE pg_catalog."default" NOT NULL,
+	nome_servico character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     CONSTRAINT indicadores_pesca_dimensao_pkey PRIMARY KEY (protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
 )
 WITH (
@@ -170,7 +173,8 @@ t1.cod_etapa,
 t1.cod_ciclo,
 t1.nota,
 t1.dat_avaliacao,
-split_part(split_part(t1.dimensao_avaliacao, ',', n.n), ',', 1) dimensao_avaliacao    
+split_part(split_part(t1.dimensao_avaliacao, ',', n.n), ',', 1) dimensao_avaliacao,
+t1.nome_servico
 FROM indicadores_pesca as t1
 CROSS JOIN 
 (
