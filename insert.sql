@@ -74,7 +74,7 @@ WITH (
 TABLESPACE pg_default;
 
 INSERT INTO public.indicadores_cvi_dimensao(
-protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
+protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao,nome_servico)
 (
 SELECT
 t1.protocolo,
@@ -100,7 +100,8 @@ CROSS JOIN
 t1.cod_etapa,
 t1.cod_ciclo,
 t1.nota,
-t1.dat_avaliacao
+t1.dat_avaliacao,
+t1.nome_servico
 );
 
 --- Pesca
