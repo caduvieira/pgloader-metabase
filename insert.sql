@@ -13,7 +13,9 @@ WHERE
 indicadores.protocolo = subquery.protocolo
 AND indicadores.dat_encerramento = subquery.ultima_data;
 
-CREATE TABLE IF NOT EXISTS public.indicadores_cvi
+DROP TABLE IF EXISTS public.indicadores_cvi;
+
+CREATE TABLE public.indicadores_cvi
 (
     cod_processo integer NOT NULL,
     configuracao_orgao_id integer,
@@ -47,15 +49,15 @@ WITH (
 )
 TABLESPACE pg_default;
 
-TRUNCATE public.indicadores_cvi;
-
 INSERT INTO public.indicadores_cvi(
 cod_processo, configuracao_orgao_id, protocolo, nome_orgao, nome_servico, cod_ciclo, cod_etapa, nome_etapa, cod_tipo_etapa, nome_tipo_etapa, ide_finalizado, status_processo, cpf_cidadao, dat_abertura, dat_encerramento, dat_conclusao_etapa, nota, dimensao_avaliacao, dat_avaliacao, id_fase_processo, nome_fase_processo, cod_servico, cod_orgao, atendente, situacao_atual)
 (
 SELECT * FROM indicadores WHERE cod_servico IN (1159,6906)
 );
 
-CREATE TABLE IF NOT EXISTS public.indicadores_cvi_dimensao
+DROP TABLE IF EXISTS public.indicadores_cvi_dimensao;
+
+CREATE TABLE public.indicadores_cvi_dimensao
 (
     protocolo character varying(100) COLLATE pg_catalog."default" NOT NULL DEFAULT NULL::character varying,
     nota integer NOT NULL,
@@ -63,15 +65,13 @@ CREATE TABLE IF NOT EXISTS public.indicadores_cvi_dimensao
     cod_etapa smallint NOT NULL,
     dat_avaliacao timestamp without time zone NOT NULL,
     dimensao_avaliacao text COLLATE pg_catalog."default" NOT NULL,
-	nome_servico character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    nome_servico character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     CONSTRAINT indicadores_cvi_dimensao_pkey PRIMARY KEY (protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
 )
 WITH (
     OIDS = FALSE
 )
 TABLESPACE pg_default;
-
-TRUNCATE public.indicadores_cvi_dimensao;
 
 INSERT INTO public.indicadores_cvi_dimensao(
 protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
@@ -104,7 +104,9 @@ t1.dat_avaliacao
 );
 
 --- Pesca
-CREATE TABLE IF NOT EXISTS public.indicadores_pesca
+DROP TABLE IF EXISTS public.indicadores_pesca;
+
+CREATE TABLE public.indicadores_pesca
 (
     cod_processo integer NOT NULL,
     configuracao_orgao_id integer,
@@ -138,13 +140,13 @@ WITH (
 )
 TABLESPACE pg_default;
 
-TRUNCATE public.indicadores_pesca;
-
 INSERT INTO public.indicadores_pesca(
 cod_processo, configuracao_orgao_id, protocolo, nome_orgao, nome_servico, cod_ciclo, cod_etapa, nome_etapa, cod_tipo_etapa, nome_tipo_etapa, ide_finalizado, status_processo, cpf_cidadao, dat_abertura, dat_encerramento, dat_conclusao_etapa, nota, dimensao_avaliacao, dat_avaliacao, id_fase_processo, nome_fase_processo, cod_servico, cod_orgao, atendente, situacao_atual)
 (
 SELECT * FROM indicadores WHERE cod_servico IN (10008,10010)
 );
+
+DROP TABLE IF EXISTS public.indicadores_pesca_dimensao;
 
 CREATE TABLE IF NOT EXISTS public.indicadores_pesca_dimensao
 (
@@ -154,7 +156,7 @@ CREATE TABLE IF NOT EXISTS public.indicadores_pesca_dimensao
     cod_etapa smallint NOT NULL,
     dat_avaliacao timestamp without time zone NOT NULL,
     dimensao_avaliacao text COLLATE pg_catalog."default" NOT NULL,
-	nome_servico character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
+    nome_servico character varying(255) COLLATE pg_catalog."default" DEFAULT NULL::character varying,
     CONSTRAINT indicadores_pesca_dimensao_pkey PRIMARY KEY (protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
 )
 WITH (
@@ -162,10 +164,8 @@ WITH (
 )
 TABLESPACE pg_default;
 
-TRUNCATE public.indicadores_pesca_dimensao;
-
 INSERT INTO public.indicadores_pesca_dimensao(
-protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao)
+protocolo, nota, cod_ciclo, cod_etapa, dat_avaliacao, dimensao_avaliacao, nome_servico)
 (
 SELECT
 t1.protocolo,
@@ -191,5 +191,6 @@ CROSS JOIN
 t1.cod_etapa,
 t1.cod_ciclo,
 t1.nota,
-t1.dat_avaliacao
+t1.dat_avaliacao,
+t1.nome_servico
 );
