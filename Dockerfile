@@ -50,4 +50,7 @@ FROM debian:stable-slim
 
 COPY --from=builder /opt/src/pgloader/build/bin/pgloader /usr/local/bin
 COPY insert.sql insert.sql
+COPY insert_hom.sql insert_hom.sql
 COPY load.pgloader load.pgloader
+COPY hom_load.pgloader hom_load.pgloader
+COPY run.sh run.sh
